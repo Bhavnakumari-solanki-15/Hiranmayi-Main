@@ -99,7 +99,7 @@ export function Hero() {
           trigger: containerRef.current,
           start: 'top top',
           end: '+=600%',
-          scrub: 1.2,
+          scrub: true,
           pin: true,
           onUpdate: () => requestRender(),
         },

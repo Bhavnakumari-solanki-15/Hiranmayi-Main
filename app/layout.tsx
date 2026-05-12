@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono, Cormorant_Garamond } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const geist = Geist({ subsets: ["latin"], variable: '--font-geist' });
@@ -49,7 +48,6 @@ export default function RootLayout({
         <SmoothScroll>
           {children}
         </SmoothScroll>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )
