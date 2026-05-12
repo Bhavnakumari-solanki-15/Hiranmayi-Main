@@ -171,15 +171,21 @@ export function Hero() {
       imagesRef.current = loadedImages;
     };
 
+    (window as any).resetHeroToStart = () => {
+      frameRef.current.index = 1;
+      requestRender();
+    };
+
     window.addEventListener('resize', requestRender);
     return () => {
       window.removeEventListener('resize', requestRender);
+      delete (window as any).resetHeroToStart;
       ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, []);
 
   return (
-    <div ref={containerRef} className="relative w-full overflow-hidden bg-white">
+    <div id="hero" ref={containerRef} className="relative w-full overflow-hidden bg-white">
       {/* Sticky Canvas Container */}
       <div className="relative h-screen w-full">
         
