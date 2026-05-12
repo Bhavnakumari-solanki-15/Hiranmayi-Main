@@ -23,29 +23,29 @@ export function Hero() {
     let loadedCount = 0;
     const loadedImages: HTMLImageElement[] = [];
 
-    const preloadImages = () => {
-      for (let i = 1; i <= TOTAL_FRAMES; i++) {
-        const img = new Image();
-        const frameNum = i.toString().padStart(3, '0');
-        img.src = `/frames/ezgif-frame-${frameNum}.png`;
-        
-        img.onload = () => {
-          loadedCount++;
-          setLoadingProgress(Math.round((loadedCount / TOTAL_FRAMES) * 100));
-          if (loadedCount === TOTAL_FRAMES) {
-            setIsLoaded(true);
-            setTimeout(initScrollAnimation, 100);
-          }
-        };
-        loadedImages[i] = img;
-      }
-      imagesRef.current = loadedImages;
-    };
-
     const renderFrame = () => {
       const canvas = canvasRef.current;
       const context = canvas?.getContext('2d');
-      const img = imagesRef.current[Math.floor(frameRef.current.index)];
+      const currentIndex = Math.floor(frameRef.current.index);
+      
+      let img = loadedImages[currentIndex];
+      
+      // Progressive fallback: if current frame is not loaded yet,
+      // find and render the nearest loaded frame for zero-latency scrolling.
+      if (!img || !img.complete) {
+        for (let offset = 1; offset <= TOTAL_FRAMES; offset++) {
+          const prev = currentIndex - offset;
+          const next = currentIndex + offset;
+          if (prev >= 1 && loadedImages[prev] && loadedImages[prev].complete) {
+            img = loadedImages[prev];
+            break;
+          }
+          if (next <= TOTAL_FRAMES && loadedImages[next] && loadedImages[next].complete) {
+            img = loadedImages[next];
+            break;
+          }
+        }
+      }
 
       if (canvas && context && img && img.complete) {
         const ratio = window.devicePixelRatio || 1;
@@ -106,7 +106,44 @@ export function Hero() {
       });
     };
 
-    preloadImages();
+    // 1. Load the first frame immediately to display the hero section instantly
+    const firstImg = new Image();
+    firstImg.src = '/frames-webp/ezgif-frame-001.webp';
+    firstImg.onload = () => {
+      loadedImages[1] = firstImg;
+      imagesRef.current = loadedImages;
+      setIsLoaded(true);
+      
+      // Initialize the scroll animation and render immediately
+      initScrollAnimation();
+      
+      // 2. Preload the remaining frames in the background progressively
+      preloadRemainingImages();
+    };
+
+    const preloadRemainingImages = () => {
+      for (let i = 2; i <= TOTAL_FRAMES; i++) {
+        const img = new Image();
+        const frameNum = i.toString().padStart(3, '0');
+        img.src = `/frames-webp/ezgif-frame-${frameNum}.webp`;
+        
+        img.onload = () => {
+          loadedCount++;
+          loadedImages[i] = img;
+          setLoadingProgress(Math.round((loadedCount / TOTAL_FRAMES) * 100));
+          
+          // If the user has scrolled to this frame, trigger a render
+          if (Math.floor(frameRef.current.index) === i) {
+            requestRender();
+          }
+        };
+        img.onerror = () => {
+          // Keep incrementing on error so logic doesn't hang
+          loadedCount++;
+        };
+      }
+      imagesRef.current = loadedImages;
+    };
 
     window.addEventListener('resize', requestRender);
     return () => {
