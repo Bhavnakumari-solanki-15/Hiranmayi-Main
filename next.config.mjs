@@ -1,11 +1,19 @@
 /** @type {import('next').NextConfig} */
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const nextConfig = {
+  turbo: {
+    root: __dirname,
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
   images: {
     unoptimized: true,
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;
