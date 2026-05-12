@@ -114,34 +114,60 @@ export function Hero() {
       imagesRef.current = loadedImages;
       setIsLoaded(true);
       
-      // Initialize the scroll animation and render immediately
+      // Initialize scroll animation and render first frame immediately
       initScrollAnimation();
       
-      // 2. Preload the remaining frames in the background progressively
-      preloadRemainingImages();
+      // 2. Preload remaining frames progressively in the background.
+      // We delay this slightly to let the rest of the page load instantly first.
+      if (typeof window !== 'undefined') {
+        const startPreload = () => {
+          setTimeout(preloadRemainingImages, 1000);
+        };
+        if (document.readyState === 'complete') {
+          startPreload();
+        } else {
+          window.addEventListener('load', startPreload);
+          return () => window.removeEventListener('load', startPreload);
+        }
+      }
     };
 
     const preloadRemainingImages = () => {
-      for (let i = 2; i <= TOTAL_FRAMES; i++) {
+      let nextIndex = 2;
+
+      const loadNext = () => {
+        if (nextIndex > TOTAL_FRAMES) return;
+
+        const i = nextIndex++;
         const img = new Image();
         const frameNum = i.toString().padStart(3, '0');
         img.src = `/frames-webp/ezgif-frame-${frameNum}.webp`;
-        
+
         img.onload = () => {
           loadedCount++;
           loadedImages[i] = img;
           setLoadingProgress(Math.round((loadedCount / TOTAL_FRAMES) * 100));
           
-          // If the user has scrolled to this frame, trigger a render
+          // Render if the user has already scrolled to this frame
           if (Math.floor(frameRef.current.index) === i) {
             requestRender();
           }
+          // Load next image in this queue slot
+          loadNext();
         };
+
         img.onerror = () => {
-          // Keep incrementing on error so logic doesn't hang
           loadedCount++;
+          loadNext();
         };
+      };
+
+      // Start 3 concurrent loader queues to load frames sequentially.
+      // This leaves 3+ connection slots fully open for other user interactions/images.
+      for (let q = 0; q < 3; q++) {
+        loadNext();
       }
+
       imagesRef.current = loadedImages;
     };
 
