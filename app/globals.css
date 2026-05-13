@@ -159,15 +159,16 @@ html {
 
 
 /* Hide platform toolbars/badges */
+netlify-drawer,
+#netlify-drawer, 
+.netlify-drawer, 
+[id*="netlify"],
+[class*="netlify"],
 #vercel-toolbar, 
 .vercel-toolbar, 
 [data-vercel-toolbar],
 #__next-feedback,
 .nextjs-toast-errors-parent,
-#netlify-drawer,
-.netlify-drawer,
-[id*="netlify"],
-[class*="netlify"],
 [id*="vercel"],
 [class*="vercel"] {
   display: none !important;

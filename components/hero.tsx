@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -12,7 +12,7 @@ const TOTAL_FRAMES = 257;
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
   
   const imagesRef = useRef<HTMLImageElement[]>([]);
@@ -196,7 +196,48 @@ export function Hero() {
           style={{ opacity: isLoaded ? 1 : 0, transition: 'opacity 0.8s ease' }}
         />
 
-        {/* Loading experience removed as requested */}
+        {/* Premium Minimalist Loader Overlay */}
+        <AnimatePresence>
+          {!isLoaded && (
+            <motion.div
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+              className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-[#0B1B12]"
+            >
+              <div className="flex flex-col items-center gap-6">
+                {/* Brand Logo with soft float/fade entry */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, ease: 'easeOut' }}
+                  className="px-6"
+                >
+                  <img 
+                    src="/Hir_Logo-768x140-removebg-preview.png" 
+                    alt="HIRANMAYI" 
+                    className="h-10 md:h-14 w-auto object-contain brightness-100"
+                  />
+                </motion.div>
+                
+                {/* Premium Golden Loading Progress Line */}
+                <div className="h-[2px] w-40 overflow-hidden rounded-full bg-[#D1A26C]/20 relative">
+                  <motion.div 
+                    className="absolute h-full left-0 top-0 bg-gradient-to-r from-[#D1A26C] to-[#EAE5D9]"
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 1.8, ease: "linear", repeat: Infinity }}
+                  />
+                </div>
+                
+                {/* Understated dynamic message */}
+                <span className="font-sans text-[9px] tracking-[0.35em] uppercase text-[#EAE5D9]/50 animate-pulse">
+                  Entering Sanctuary...
+                </span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Subtle Vignette */}
         <div className="pointer-events-none absolute inset-0 z-[15] bg-gradient-to-b from-white/10 via-transparent to-white/10" />

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
@@ -8,35 +8,50 @@ import { useLenis } from 'lenis/react';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const { scrollY } = useScroll();
+  const [hoveredIndex, setHoveredIndex] = useState(0);
   const lenis = useLenis();
   
-  // Transform header style based on scroll to ensure 100% readability at all times
-  const headerBg = useTransform(
-    scrollY,
-    [0, 100],
-    ['rgba(11, 27, 18, 0.75)', 'rgba(11, 27, 18, 0.96)']
-  );
-  
-  const headerBlur = useTransform(
-    scrollY,
-    [0, 100],
-    ['blur(12px)', 'blur(20px)']
-  );
-
-  const headerBorder = useTransform(
-    scrollY,
-    [0, 100],
-    ['1px solid rgba(209, 162, 108, 0.1)', '1px solid rgba(209, 162, 108, 0.2)']
-  );
-
   const navItems = [
-    { label: 'Home', href: '#hero', number: '01' },
-    { label: 'Mission', href: '#mission', number: '02' },
-    { label: 'Portfolio', href: '#portfolio', number: '03' },
-    { label: 'Services', href: '#services', number: '04' },
-    { label: 'Contact', href: '#contact', number: '05' },
+    { 
+      number: "01", 
+      label: "HOME", 
+      href: "#hero",
+      image: "/mission-view-1.png",
+      subtitle: 'COHESIVE LANDSCAPE INTEGRATION',
+      quote: "“Architecture should not compete with nature, it should celebrate it.”"
+    },
+    { 
+      number: "02", 
+      label: "MISSION", 
+      href: "#mission",
+      image: "/mission-view-2.png",
+      subtitle: 'ECOLOGICAL PRESERVATION',
+      quote: "“Preserving local biodiversity while crafting exceptional spaces.”"
+    },
+    { 
+      number: "03", 
+      label: "PORTFOLIO", 
+      href: "#portfolio",
+      image: "/portfolio-1.jpg",
+      subtitle: 'CRAFTED RESIDENCES',
+      quote: "“Where elegant human craftsmanship meets untamed natural beauty.”"
+    },
+    { 
+      number: "04", 
+      label: "SERVICES", 
+      href: "#services",
+      image: "/portfolio-2.jpg",
+      subtitle: 'SUSTAINABLE ARCHITECTURE',
+      quote: "“Designing carbon-neutral structures that harmonize with their environments.”"
+    },
+    { 
+      number: "05", 
+      label: "CONTACT", 
+      href: "#contact",
+      image: "/portfolio-3.jpg",
+      subtitle: 'BEGIN YOUR JOURNEY',
+      quote: "“Let us design your private sanctuary in absolute harmony with the earth.”"
+    }
   ];
 
   // Disable scroll when full screen menu is open
@@ -78,13 +93,14 @@ export function Header() {
     <>
       <motion.header 
         style={{ 
-          backgroundColor: headerBg,
-          backdropFilter: headerBlur,
-          borderBottom: headerBorder
+          backgroundColor: 'rgba(11, 27, 18, 0.65)',
+          backdropFilter: 'blur(28px)',
+          WebkitBackdropFilter: 'blur(28px)',
+          borderBottom: '1px solid rgba(209, 162, 108, 0.15)'
         }}
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        className="fixed top-0 left-0 right-0 z-50"
       >
-        <div className="mx-auto max-w-7xl px-6 py-5 md:py-6">
+        <div className="mx-auto max-w-7xl px-6 py-3 md:py-3.5">
           <div className="flex items-center justify-between">
             
             {/* LEFT SIDE: Menu Button + Portfolio Direct Link */}
@@ -112,34 +128,18 @@ export function Header() {
               </a>
             </div>
 
-            {/* CENTER: Infinite Circular Arrows Monogram & Brand Title */}
-            <div className="flex items-center gap-2.5">
+            {/* CENTER: Official Brand Logo Image */}
+            <div className="flex items-center">
               <a 
                 href="#hero"
                 onClick={(e) => handleSmoothScroll(e, '#hero')}
-                className="flex items-center gap-2.5 group focus:outline-none"
+                className="flex items-center group focus:outline-none"
               >
-                <div className="relative flex h-9 w-9 items-center justify-center rounded-full border border-[#D1A26C]/20 bg-[#0B1B12]/40 transition-transform duration-500 group-hover:rotate-180">
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path 
-                      d="M16 12a4 4 0 0 0-4-4v2l-3-3 3-3v2a6 6 0 0 1 6 6z" 
-                      stroke="#d1a26c" 
-                      strokeWidth="1.5" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                    />
-                    <path 
-                      d="M8 12a4 4 0 0 0 4 4v-2l3 3-3 3v-2a6 6 0 0 1-6-6z" 
-                      stroke="#d1a26c" 
-                      strokeWidth="1.5" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-                <span className="font-serif text-lg md:text-xl tracking-[0.18em] text-[#EAE5D9] group-hover:text-[#d1a26c] transition-colors font-semibold uppercase">
-                  Hiranmayi
-                </span>
+                <img 
+                  src="/Hir_Logo-768x140-removebg-preview.png" 
+                  alt="HIRANMAYI" 
+                  className="h-8 md:h-10 w-auto object-contain brightness-100 group-hover:brightness-110 transition-all duration-300"
+                />
               </a>
             </div>
 
@@ -153,24 +153,6 @@ export function Header() {
                 CONTACT US
               </a>
 
-              {/* Heart Micro-interactive Favorites Icon */}
-              <button 
-                onClick={() => setIsLiked(!isLiked)}
-                className="relative flex items-center justify-center p-1 focus:outline-none"
-                aria-label="Add to favorites"
-              >
-                <motion.svg 
-                  animate={isLiked ? { scale: [1, 1.3, 0.95, 1.1, 1] } : {}}
-                  transition={{ duration: 0.45, ease: 'easeInOut' }}
-                  className="h-[18px] w-[18px] md:h-5 md:w-5 cursor-pointer" 
-                  viewBox="0 0 24 24" 
-                  fill={isLiked ? '#d1a26c' : 'none'} 
-                  stroke={isLiked ? '#d1a26c' : '#EAE5D9'} 
-                  strokeWidth="1.5"
-                >
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                </motion.svg>
-              </button>
             </div>
 
           </div>
@@ -218,7 +200,8 @@ export function Header() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 + index * 0.08, duration: 0.5 }}
-                    className="group relative flex items-baseline gap-4 md:gap-6 overflow-hidden"
+                    className="group relative flex items-baseline gap-4 md:gap-6 overflow-hidden cursor-pointer"
+                    onMouseEnter={() => setHoveredIndex(index)}
                   >
                     {/* Golden Index Number */}
                     <span className="font-sans text-xs md:text-sm font-medium tracking-[0.2em] text-[#d1a26c]/50 group-hover:text-[#d1a26c] transition-colors">
@@ -236,30 +219,7 @@ export function Header() {
                 ))}
               </nav>
 
-              {/* Bottom Row: Premium Brand Heritage Badge */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-[#D1A26C]/10 pt-6"
-              >
-                <div className="flex items-center gap-3 text-[#EAE5D9]/60 text-[10px] md:text-xs tracking-[0.15em] font-sans">
-                  <span>© {new Date().getFullYear()} HIRANMAYI DEVELOPMENTS</span>
-                  <span className="hidden sm:inline-block">•</span>
-                  <span className="hidden sm:inline-block">NATURE LIVING</span>
-                </div>
 
-                {/* Cookie / Heritage pill container */}
-                <div className="flex items-center gap-2 rounded-full border border-[#D1A26C]/20 bg-[#0B1B12] px-4 py-2 text-[9px] md:text-[10px] font-medium tracking-[0.1em] text-[#EAE5D9] shadow-inner shadow-green-950/20">
-                  <span className="text-white/60">THIS SITE PRESERVES ARCHITECTURAL ECO-SYSTEMS</span>
-                  <button 
-                    onClick={() => setIsMenuOpen(false)}
-                    className="rounded-full bg-[#d1a26c] px-3 py-1 font-semibold text-[#0B1B12] hover:bg-[#eae5d9] transition-colors"
-                  >
-                    HIRANMAYI
-                  </button>
-                </div>
-              </motion.div>
 
             </motion.div>
 
@@ -269,28 +229,36 @@ export function Header() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-              className="relative hidden h-full w-[50%] overflow-hidden lg:block border-l border-[#D1A26C]/10"
+              className="relative hidden h-full w-[50%] overflow-hidden lg:block border-l border-[#D1A26C]/10 bg-[#0B1B12]"
             >
-              {/* Background Architectural View */}
-              <motion.div 
-                initial={{ scale: 1.15 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 1.5 }}
-                style={{ backgroundImage: `url('/mission-view-1.png')` }}
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              />
-              {/* Deep Emerald Forest Overlay for Premium Contrast */}
-              <div className="absolute inset-0 bg-gradient-to-l from-[#0b1b12]/20 via-[#0b1b12]/80 to-[#0b1b12]" />
-              
-              {/* Aesthetic Text Overlay on Image Side */}
-              <div className="absolute bottom-14 left-12 right-12 z-10 flex flex-col gap-2">
-                <span className="text-[10px] font-semibold tracking-[0.3em] text-[#d1a26c] uppercase font-sans">
-                  COHESIVE LANDSCAPE INTEGRATION
-                </span>
-                <span className="font-serif text-2xl font-light leading-relaxed text-[#EAE5D9] max-w-sm">
-                  “Architecture should not compete with nature, it should celebrate it.”
-                </span>
-              </div>
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.div
+                  key={hoveredIndex}
+                  initial={{ y: '100%', opacity: 0.9 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: '-100%', opacity: 0.9 }}
+                  transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
+                  className="absolute inset-0 h-full w-full overflow-hidden"
+                >
+                  {/* Background Architectural View */}
+                  <div 
+                    style={{ backgroundImage: `url('${navItems[hoveredIndex].image}')` }}
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                  />
+                  {/* Deep Emerald Forest Overlay for Premium Contrast */}
+                  <div className="absolute inset-0 bg-gradient-to-l from-[#0b1b12]/20 via-[#0b1b12]/80 to-[#0b1b12]" />
+                  
+                  {/* Aesthetic Text Overlay on Image Side */}
+                  <div className="absolute bottom-14 left-12 right-12 z-10 flex flex-col gap-2">
+                    <span className="text-[10px] font-semibold tracking-[0.3em] text-[#d1a26c] uppercase font-sans">
+                      {navItems[hoveredIndex].subtitle}
+                    </span>
+                    <span className="font-serif text-2xl font-light leading-relaxed text-[#EAE5D9] max-w-sm">
+                      {navItems[hoveredIndex].quote}
+                    </span>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </motion.div>
 
           </motion.div>

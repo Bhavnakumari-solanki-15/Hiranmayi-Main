@@ -11,7 +11,8 @@ export function BadgeRemover() {
         '[data-vercel-toolbar]',
         '#__next-feedback',
         '#netlify-drawer',
-        '.netlify-drawer'
+        '.netlify-drawer',
+        'netlify-drawer'
       ];
       selectors.forEach(s => {
         document.querySelectorAll(s).forEach(el => {
