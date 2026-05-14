@@ -35,7 +35,7 @@ export function Footer() {
               Navigation
             </h3>
             <ul className="space-y-2">
-              {['Home', 'Portfolio', 'Services', 'Contact'].map((item) => (
+              {['Home', 'Projects', 'Services', 'Contact'].map((item) => (
                 <li key={item}>
                   <a
                     href="#"

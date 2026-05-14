@@ -101,7 +101,7 @@ export function Portfolio() {
   }, []);
 
   return (
-    <section id="portfolio" ref={sectionRef} className="relative min-h-screen bg-background py-24 px-4">
+    <section id="projects" ref={sectionRef} className="relative min-h-screen bg-background py-24 px-4">
       <div className="mx-auto max-w-7xl">
         {/* Heading */}
         <motion.div className="portfolio-heading mb-20 text-center">

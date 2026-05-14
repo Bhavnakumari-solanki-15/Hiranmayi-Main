@@ -30,8 +30,8 @@ export function Header() {
     },
     { 
       number: "03", 
-      label: "PORTFOLIO", 
-      href: "#portfolio",
+      label: "PROJECTS", 
+      href: "#projects",
       image: "/portfolio-1.jpg",
       subtitle: 'CRAFTED RESIDENCES',
       quote: "“Where elegant human craftsmanship meets untamed natural beauty.”"
@@ -120,11 +120,11 @@ export function Header() {
               </button>
 
               <a 
-                href="#portfolio"
-                onClick={(e) => handleSmoothScroll(e, '#portfolio')}
+                href="#projects"
+                onClick={(e) => handleSmoothScroll(e, '#projects')}
                 className="hidden sm:inline-block text-[10px] md:text-xs font-semibold tracking-[0.25em] uppercase text-[#EAE5D9]/70 hover:text-[#d1a26c] transition-colors font-sans"
               >
-                PORTFOLIO
+                PROJECTS
               </a>
             </div>
 
